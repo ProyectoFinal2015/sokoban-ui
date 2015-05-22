@@ -30,7 +30,7 @@ public class SokobanGame implements ApplicationListener {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private Texture[] suelos;
-	//String[] ficheros = {"muro.png", "almacenaje.png", "casilla.png"};
+
 	private Texture almacenaje;
 	private Texture suelo;
 	private Texture muro;
@@ -38,6 +38,7 @@ public class SokobanGame implements ApplicationListener {
 	private Texture caja;
 	private GameBoard gameBoard;
 	private boolean marca;
+	private boolean borrame_lueguito;
 	
 	@Override
 	public void create() {
