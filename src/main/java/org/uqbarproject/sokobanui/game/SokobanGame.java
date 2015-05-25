@@ -1,6 +1,8 @@
 package org.uqbarproject.sokobanui.game;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.uqbarproject.sokoban.domain.behavior.MovementDown;
 import org.uqbarproject.sokoban.domain.behavior.MovementLeft;
@@ -29,8 +31,7 @@ public class SokobanGame implements ApplicationListener {
 	private float keyboardCounter;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
-	private Texture[] suelos;
-
+	private Map<String,Texture> texturas;
 	private Texture almacenaje;
 	private Texture suelo;
 	private Texture muro;
@@ -38,7 +39,6 @@ public class SokobanGame implements ApplicationListener {
 	private Texture caja;
 	private GameBoard gameBoard;
 	private boolean marca;
-	private boolean borrame_lueguito;
 	
 	@Override
 	public void create() {
@@ -54,22 +54,23 @@ public class SokobanGame implements ApplicationListener {
 
 		batch = new SpriteBatch();
 		
-//		suelos = new Texture[3];
-//		for (int i = 0; i < 3; i++) {
-//			suelos[i]= new Texture(Gdx.files.internal("data/"+ficheros[i]));
-//			suelos[i].setFilter(TextureFilter.Linear, TextureFilter.Linear);
-//		}
+		texturas = new HashMap<String,Texture>();
 		
-//		almacenaje = new Texture(Gdx.files.internal("data/almacenaje.png"));
-//		almacenaje.setFilter(TextureFilter.Linear, TextureFilter.Linear);		
+		almacenaje = new Texture(Gdx.files.internal("data/almacenaje.png"));
+		almacenaje.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		texturas.put("almacenaje.png", almacenaje);
 		suelo = new Texture(Gdx.files.internal("data/suelo.png"));
 		suelo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-//		muro = new Texture(Gdx.files.internal("data/muro.png"));
-//		muro.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-//		jugador = new Texture(Gdx.files.internal("data/jugador.png"));
-//		jugador.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-//		caja = new Texture(Gdx.files.internal("data/caja.png"));
-//		caja.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		texturas.put("suelo.png", suelo);
+		muro = new Texture(Gdx.files.internal("data/muro.png"));
+		muro.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		texturas.put("muro.png", muro);
+		jugador = new Texture(Gdx.files.internal("data/jugador.png"));
+		jugador.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		texturas.put("jugador.png", jugador);
+		caja = new Texture(Gdx.files.internal("data/caja.png"));
+		caja.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		texturas.put("caja.png", caja);
 		//endScreen = new Texture(Gdx.files.internal("data/libgdx.png"));
 		
 		gameBoard = new GameBoard(5,6); //WarehouseMap.createWarehouse();
@@ -103,38 +104,22 @@ public class SokobanGame implements ApplicationListener {
 		batch.begin();
 		
 		
-		
-		// Draw map
-		//Integer[][] map = whr.getMap();
 		for (int i = 0; i < gameBoard.getWide(); i++) {
 			for (int j = 0; j < gameBoard.getHeight(); j++) {
-				//batch.draw(this.suelos[map[i][j] -1], (j*32), h - (i*32));
 				List<Element> lista = gameBoard.findElementByPlace(j,i);
 				if (lista.isEmpty()){
-					//Dibujo piso
-					suelo = new Texture(Gdx.files.internal("data/suelo.png"));
-					suelo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+					//Dibujo piso					
 					batch.draw(suelo, (j*32), h - (i*32));
 				}
 				else{
-					caja = new Texture(Gdx.files.internal("data/" + lista.get(0).getImageName()));
-					caja.setFilter(TextureFilter.Linear, TextureFilter.Linear);					
-					batch.draw(caja, (j*32), h - (i*32));
+					batch.draw(texturas.get(lista.get(0).getImageName()), (j*32), h - (i*32));
 				}
 					
 			}
 		}
 		
-		// Draw crates
-//		for (Box b: this.whr.boxs) {
-//			batch.draw(this.caja, (b.getX()*32), h - (b.getY()*32));
-//		}
-		
 		// Draw player
-		jugador = new Texture(Gdx.files.internal("data/jugador.png"));
-		jugador.setFilter(TextureFilter.Linear, TextureFilter.Linear);	
-		
-		batch.draw(this.jugador, (gameBoard.getaPlayer().getMyPosition().getX()*32), h - (gameBoard.getaPlayer().getMyPosition().getY()*32));
+		batch.draw(texturas.get("jugador.png"), (gameBoard.getaPlayer().getMyPosition().getX()*32), h - (gameBoard.getaPlayer().getMyPosition().getY()*32));
 
 		// check end of game
 //		if (this.gameBoard.isGameOver()) {
@@ -160,9 +145,8 @@ public class SokobanGame implements ApplicationListener {
 	@Override
 	public void dispose() {
 		batch.dispose();
-		//for (Texture texture: this.suelos)
-		//	texture.dispose();
 	}
+	
 	private void processKeyboard() {
 		this.keyboardCounter += Gdx.graphics.getDeltaTime();
 		if (this.keyboardCounter > 0.09f) {
@@ -190,7 +174,6 @@ public class SokobanGame implements ApplicationListener {
 	    	//this.whr.movePlayer(Movement.Down);
 	    	return;
 	    }
-	    //Gdx.input.
 		}		
 	}
 }

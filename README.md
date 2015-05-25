@@ -4,4 +4,3 @@ Implmentación de gráfica para el sokoban-domain utilizando LibGDX con JWGL com
 # Nota!
 Primero deben bajar el proyecto sokoban-domain y correr un mvn install.
 
-### Mandale fruta rasta...
